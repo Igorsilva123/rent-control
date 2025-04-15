@@ -3,6 +3,7 @@ package aluguel.inquilino.api.domain.tenants;
 
 import aluguel.inquilino.api.DTO.tenantsDTO.TenantDataRegistrationDTO;
 import aluguel.inquilino.api.DTO.tenantsDTO.UpdateTenantsDTO;
+import aluguel.inquilino.api.domain.house.House;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class Tenants {
     private String name;
     private String phone;
     private LocalDate rentedAt;
+
+    @OneToOne(mappedBy = "tenant")
+    private House house;
 
     public Tenants(TenantDataRegistrationDTO data){
         this.name = data.name();

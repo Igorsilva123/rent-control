@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import java.time.LocalDate;
 
-public record TenantListingDataDTO(Long id, String name, String phone, LocalDate rentedAt) {
+public record TenantListingDataDTO(Long id_tenants, String name, String phone, LocalDate rentedAt) {
     public TenantListingDataDTO(Tenants tenants){
         this(tenants.getId_tenants(), tenants.getName(), tenants.getPhone(), tenants.getRentedAt());
     }

@@ -5,11 +5,13 @@ import aluguel.inquilino.api.DTO.house.HouseDataRegistrationDTO;
 import aluguel.inquilino.api.DTO.house.UpdateHouse;
 import aluguel.inquilino.api.DTO.tenantsDTO.UpdateTenantsDTO;
 import aluguel.inquilino.api.domain.address.Address;
+import aluguel.inquilino.api.domain.owner.Owner;
+import aluguel.inquilino.api.domain.tenants.Tenants;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
 
-@Table(name = "house")
+@Table(name = "houses")
 @Entity(name = "House")
 @Getter
 @Setter
@@ -25,6 +27,14 @@ public class House {
     @Embedded
     private Address address;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private Owner owner;
+
+    @OneToOne
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private Tenants tenant;
+
     public House(HouseDataRegistrationDTO data) {
         this.rent_value = data.rent_value();
         this.address = new Address(data.address());
@@ -35,7 +45,7 @@ public class House {
             this.rent_value = house.rent_value();
         }
         if (house.address() != null) {
-            this.address = house.address();
+            this.address.atualizarInformacoes(house.address());
         }
 
     }

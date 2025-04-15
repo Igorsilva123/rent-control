@@ -6,9 +6,13 @@ import aluguel.inquilino.api.DTO.tenantsDTO.UpdateTenantsDTO;
 import aluguel.inquilino.api.domain.tenants.Tenants;
 import aluguel.inquilino.api.repository.TenantsRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -37,8 +41,8 @@ public class TenantsService {
     }
 
     @Transactional
-    public Tenants putTenants(Long id, UpdateTenantsDTO dados){
-        var tenants = repository.getReferenceById(id);
+    public Tenants putTenants(UpdateTenantsDTO dados){
+        var tenants = repository.getReferenceById(dados.id_tenants());
         tenants.updateTenants(dados);
 
         return tenants;

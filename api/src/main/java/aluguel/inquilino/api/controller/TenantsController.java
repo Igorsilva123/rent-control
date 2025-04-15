@@ -42,10 +42,11 @@ public class TenantsController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateTenants(@PathVariable Long id, @RequestBody UpdateTenantsDTO dados){
-            var tenants = tenantsService.putTenants(id, dados);
-            return ResponseEntity.ok(new TenantListingDataDTO(tenants));
+    @PutMapping
+    public ResponseEntity updateTenants(@RequestBody @Valid UpdateTenantsDTO dados) {
+        var tenants = tenantsService.putTenants(dados);
+        return ResponseEntity.ok(new TenantListingDataDTO(tenants));
     }
+
 
 }

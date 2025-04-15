@@ -48,7 +48,7 @@ public class HouseController {
     @PutMapping
     public ResponseEntity putHouse(@RequestBody @Valid UpdateHouse dados){
         var newHouse = houseService.putHouse(dados);
-        return ResponseEntity.ok(newHouse);
+        return ResponseEntity.ok(new HouseListingDataDTO(newHouse));
     }
 
 }
