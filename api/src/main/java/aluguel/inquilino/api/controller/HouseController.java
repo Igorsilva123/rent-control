@@ -24,9 +24,9 @@ public class HouseController {
 
     @PostMapping
     public ResponseEntity saveHouse(@RequestBody @Valid HouseDataRegistrationDTO data){
-        houseService.createHouse(data);
+        var house = houseService.saveHouse(data);
 
-        return ResponseEntity.ok("House registered successfully");
+        return ResponseEntity.ok("usuario registrado");
 
     }
 

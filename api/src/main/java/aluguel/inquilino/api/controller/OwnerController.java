@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RestController
+@RequestMapping("/owner")
 public class OwnerController {
     @Autowired
     private OwnerService ownerService;
@@ -29,13 +30,13 @@ public class OwnerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity saveOwner(@PathVariable Long id_owners){
+    public ResponseEntity deleteOwner(@PathVariable Long id_owners){
         ownerService.deleteById(id_owners);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping()
-    public ResponseEntity saveOwner(@RequestBody @Valid UpdateOwnerDTO dados){
+    public ResponseEntity updateOwner(@RequestBody @Valid UpdateOwnerDTO dados){
         var newOwner = ownerService.putOwner(dados);
         return ResponseEntity.ok(new DataListingOwnerDTO(newOwner));
     }

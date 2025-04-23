@@ -6,14 +6,16 @@ import aluguel.inquilino.api.DTO.house.HouseListingDataDTO;
 import aluguel.inquilino.api.DTO.house.UpdateHouse;
 import aluguel.inquilino.api.DTO.tenantsDTO.TenantListingDataDTO;
 import aluguel.inquilino.api.domain.house.House;
+import aluguel.inquilino.api.domain.owner.Owner;
+import aluguel.inquilino.api.domain.tenants.Tenants;
 import aluguel.inquilino.api.repository.HouseRepository;
+import aluguel.inquilino.api.repository.OwnerRepository;
+import aluguel.inquilino.api.repository.TenantsRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.List;
 
@@ -23,12 +25,28 @@ public class HouseService {
     @Autowired
     private HouseRepository repository;
 
-    @Transactional
-    public void createHouse(HouseDataRegistrationDTO data){
-        var house = new House(data);
-        repository.save(house);
-    }
+    @Autowired
+    private OwnerRepository ownerRepository;
 
+    @Autowired
+    private TenantsRepository tenantsRepository;
+
+    @Transactional
+    public House saveHouse(HouseDataRegistrationDTO data) {
+        Owner owner = ownerRepository.getReferenceById(data.owner_id());
+        Tenants tenant = tenantsRepository.getReferenceById(data.tenant_id());
+
+        if(repository.existsByTenant(tenant)){
+            throw new IllegalArgumentException("Esse inquilino já está alugando uma casa.");
+        }
+
+        House house = new House(data);
+        house.setOwner(owner);
+        house.setTenant(tenant);
+
+
+        return repository.save(house);
+    }
     public List<HouseListingDataDTO>getAllHouse() {
         var house = repository.findAll().stream()
                 .map(HouseListingDataDTO::new)
