@@ -23,15 +23,6 @@ public class Address {
     private String uf;
     private String cidade;
 
-    public Address(DataAddressDTO dados) {
-        this.logradouro = dados.logradouro();
-        this.bairro = dados.bairro();
-        this.cep = dados.cep();
-        this.uf = dados.uf();
-        this.cidade = dados.cidade();
-        this.numero = dados.numero();
-        this.complemento = dados.complemento();
-    }
 
     public void atualizarInformacoes(DataAddressDTO dados) {
         if (dados.logradouro() != null) {

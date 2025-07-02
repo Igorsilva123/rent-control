@@ -15,6 +15,6 @@ create table houses(
     CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES owners(id_owner),
 
 
-    tenant_id BIGINT not null,
+    tenant_id BIGINT,
     CONSTRAINT fk_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id_tenants)
 );

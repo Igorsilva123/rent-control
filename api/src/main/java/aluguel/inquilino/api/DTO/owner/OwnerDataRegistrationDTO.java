@@ -1,8 +1,6 @@
 package aluguel.inquilino.api.DTO.owner;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -13,6 +11,9 @@ public record OwnerDataRegistrationDTO(
                                        @Email
                                        String email,
                                        @NotBlank
-                                       String phone) {
+                                       String password,
+                                       @NotBlank
+                                       String phone
+                                       ) {
 
 }

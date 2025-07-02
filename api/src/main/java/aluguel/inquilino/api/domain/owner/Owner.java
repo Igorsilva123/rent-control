@@ -24,16 +24,11 @@ public class Owner {
 
     private String name;
     private String email;
+    private String password;
     private String phone;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner")
     private List<House> houses;
-
-    public Owner(OwnerDataRegistrationDTO dados){
-        this.name = dados.name();
-        this.email = dados.email();
-        this.phone = dados.phone();
-    }
 
     public void updateOwner(UpdateOwnerDTO dados) {
         if (dados.name() != null) {
@@ -44,6 +39,9 @@ public class Owner {
         }
         if (dados.phone() != null) {
             this.phone = dados.phone();
+        }
+        if (dados.password() != null) {
+            this.password = dados.password();
         }
 
     }

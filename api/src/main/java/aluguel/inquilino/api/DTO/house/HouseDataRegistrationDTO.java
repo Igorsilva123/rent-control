@@ -13,9 +13,6 @@ public record HouseDataRegistrationDTO(
         DataAddressDTO address,
 
         @NotNull
-        Long owner_id,
-
-        @NotNull
-        Long tenant_id
+        Long owner_id
 ) {
 }

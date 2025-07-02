@@ -7,6 +7,7 @@ public record UpdateOwnerDTO(@NotNull
                              Long id_owner,
                              String name,
                              String email,
+                             String password,
                              String phone) {
 
 }

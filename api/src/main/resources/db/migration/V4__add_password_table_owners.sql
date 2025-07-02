@@ -1,0 +1,2 @@
+ALTER TABLE owners
+ADD COLUMN password VARCHAR(255);

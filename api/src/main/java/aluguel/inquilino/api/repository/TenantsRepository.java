@@ -1,8 +1,8 @@
 package aluguel.inquilino.api.repository;
 
-import aluguel.inquilino.api.domain.tenants.Tenants;
+import aluguel.inquilino.api.domain.tenants.Tenant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TenantsRepository extends JpaRepository<Tenants, Long> {
+public interface TenantsRepository extends JpaRepository<Tenant, Long> {
 
 }

@@ -1,10 +1,8 @@
 package aluguel.inquilino.api.controller;
-
 import aluguel.inquilino.api.DTO.owner.DataListingOwnerDTO;
+import aluguel.inquilino.api.DTO.owner.HouseListingByOwnerDTO;
 import aluguel.inquilino.api.DTO.owner.OwnerDataRegistrationDTO;
-import aluguel.inquilino.api.DTO.owner.UpdateOwnerDTO;
-import aluguel.inquilino.api.Service.OwnerService;
-import aluguel.inquilino.api.domain.owner.Owner;
+import aluguel.inquilino.api.service.OwnerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +16,28 @@ public class OwnerController {
     private OwnerService ownerService;
 
     @PostMapping
-    public ResponseEntity saveOwner(@RequestBody @Valid OwnerDataRegistrationDTO dados){
+    public ResponseEntity<?> saveOwner(@RequestBody @Valid OwnerDataRegistrationDTO dados){
         ownerService.createOwner(dados);
         return ResponseEntity.ok("Owner registered successfully");
     }
 
-    @GetMapping
-    public ResponseEntity<List<DataListingOwnerDTO>> getAllOwners(){
-        var owners = ownerService.getAll();
+    @GetMapping("/{id}/houses")
+    public ResponseEntity<List<HouseListingByOwnerDTO>> ListHouseByOwner(@PathVariable Long id){
+        var owners = ownerService.ListHouseByOwner(id);
         return ResponseEntity.ok(owners);
     }
 
+    @GetMapping("/listowner")
+    public ResponseEntity<List<DataListingOwnerDTO>> listOwner(){
+        var owners = ownerService.listOwner();
+        return ResponseEntity.ok(owners);
+    }
+
+
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteOwner(@PathVariable Long id_owners){
+    public ResponseEntity<?> deleteOwner(@PathVariable Long id_owners){
         ownerService.deleteById(id_owners);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping()
-    public ResponseEntity updateOwner(@RequestBody @Valid UpdateOwnerDTO dados){
-        var newOwner = ownerService.putOwner(dados);
-        return ResponseEntity.ok(new DataListingOwnerDTO(newOwner));
-    }
 }

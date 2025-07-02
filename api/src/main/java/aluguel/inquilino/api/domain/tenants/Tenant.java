@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id_tenants")
-public class Tenants {
+public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_tenants;
@@ -28,11 +28,6 @@ public class Tenants {
     @OneToOne(mappedBy = "tenant")
     private House house;
 
-    public Tenants(TenantDataRegistrationDTO data){
-        this.name = data.name();
-        this.phone = data.phone();
-        this.rentedAt = LocalDate.now();
-    }
 
     public void updateTenants(UpdateTenantsDTO tenants) {
         if(tenants.name() != null){
@@ -41,6 +36,7 @@ public class Tenants {
         if(tenants.phone() != null){
             this.phone = tenants.phone();
         }
+
 
     }
 }
