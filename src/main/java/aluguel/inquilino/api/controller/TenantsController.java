@@ -41,7 +41,7 @@ public class TenantsController {
     @PutMapping
     public ResponseEntity<?> updateTenants(@RequestBody @Valid UpdateTenantsDTO dados) {
         var tenants = tenantsService.putTenants(dados);
-        return ResponseEntity.ok(new TenantListingDataDTO(tenants));
+        return ResponseEntity.ok(tenants);
     }
 
 
