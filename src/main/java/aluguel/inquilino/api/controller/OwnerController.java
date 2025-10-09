@@ -18,7 +18,7 @@ public class OwnerController {
     @PostMapping
     public ResponseEntity<?> saveOwner(@RequestBody @Valid OwnerDataRegistrationDTO dados){
         ownerService.createOwner(dados);
-        return ResponseEntity.ok("Owner registered successfully");
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/houses")

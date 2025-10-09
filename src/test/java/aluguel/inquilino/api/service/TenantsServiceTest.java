@@ -5,7 +5,7 @@ import aluguel.inquilino.api.DTO.tenantsDTO.TenantListingDataDTO;
 import aluguel.inquilino.api.Mappers.TenantMapper;
 import aluguel.inquilino.api.domain.tenants.Tenant;
 import aluguel.inquilino.api.repository.TenantsRepository;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -15,14 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.then;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TenantsServiceTest {
@@ -40,8 +37,11 @@ class TenantsServiceTest {
     private ArgumentCaptor<Tenant> tenantCaptor;
 
     @Test
-    public void ShouldCreateTenantSuccessfully() {
-        TenantDataRegistrationDTO dto = new TenantDataRegistrationDTO("Igor da Silva de Brito", "122111221");
+    @DisplayName("Deve criar um inquilino com sucesso")
+    void shouldCreateTenantSuccessfully() {
+
+        TenantDataRegistrationDTO dto = new TenantDataRegistrationDTO(
+                "Igor da Silva de Brito", "122111221");
 
         Tenant tenant = new Tenant();
         tenant.setName(dto.name());
@@ -54,32 +54,46 @@ class TenantsServiceTest {
 
         verify(tenantsRepository).save(tenantCaptor.capture());
 
-        Tenant tenantSave = tenantCaptor.getValue();
-        assertEquals(dto.name(), tenantSave.getName());
-        assertEquals(dto.phone(), tenantSave.getPhone());
+        Tenant savedTenant = tenantCaptor.getValue();
+        assertThat(savedTenant.getName()).isEqualTo(dto.name());
+        assertThat(savedTenant.getPhone()).isEqualTo(dto.phone());
+
+        verify(tenantMapper).toEntity(dto);
+        verifyNoMoreInteractions(tenantsRepository);
     }
+
     @Test
-    public void ShouldReturnTenantSucessfully(){
+    @DisplayName("Deve retornar todos os inquilinos com sucesso (sem verificar mapper)")
+    void shouldReturnTenantsSuccessfully() {
+
         Tenant tenant1 = new Tenant(1L, "Alice", "123456789", LocalDate.now(), null);
-        Tenant tenant2 = new Tenant(1L, "Bob", "123456789", LocalDate.now(), null);
+        Tenant tenant2 = new Tenant(2L, "Bob", "987654321", LocalDate.now(), null);
 
         List<Tenant> tenants = List.of(tenant1, tenant2);
 
-        TenantListingDataDTO dto1 = new TenantListingDataDTO(1L, "Alice", "123456789", LocalDate.now());
-        TenantListingDataDTO dto2 = new TenantListingDataDTO(2L, "Bob", "123456789", LocalDate.now());
+        TenantListingDataDTO dto1 = new TenantListingDataDTO(
+                1L, "Alice", "123456789", LocalDate.now());
+        TenantListingDataDTO dto2 = new TenantListingDataDTO(
+                2L, "Bob", "987654321", LocalDate.now());
 
         when(tenantsRepository.findAll()).thenReturn(tenants);
-        when(tenantMapper.toDTO(tenant1)).thenReturn(dto1);
-        when(tenantMapper.toDTO(tenant2)).thenReturn(dto2);
-
+        when(tenantMapper.toDTO(any(Tenant.class)))
+                .thenAnswer(invocation -> {
+                    Tenant t = invocation.getArgument(0);
+                    if (t.getName().equals("Alice")) return dto1;
+                    if (t.getName().equals("Bob")) return dto2;
+                    return null;
+                });
 
         List<TenantListingDataDTO> result = tenantsService.getAllTenants();
-        assertEquals("Bob", result.get(1).name());
-        assertEquals("987654321", result.get(1).phone());
+
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting("name")
+                .containsExactly("Alice", "Bob");
+        assertThat(result).extracting("phone")
+                .containsExactly("123456789", "987654321");
 
         verify(tenantsRepository).findAll();
-        verify(tenantMapper).toDTO(tenant1);
-        verify(tenantMapper).toDTO(tenant2);
-
+        verifyNoMoreInteractions(tenantsRepository);
     }
 }
