@@ -1,5 +1,7 @@
 package aluguel.inquilino.api.infra.security;
 
+import aluguel.inquilino.api.domain.user.User;
+import aluguel.inquilino.api.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,8 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import spring.project.security.entity.user.User;
-import spring.project.security.repository.UserRepository;
+
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService tokenService;
+    private spring.project.security.infra.security.TokenService tokenService;
 
     @Autowired
     private UserRepository userRepository;
