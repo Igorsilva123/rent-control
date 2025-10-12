@@ -26,7 +26,9 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String nickName;
+    private String phone;
     private LocalDate rentedAt;
+    private Boolean active;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

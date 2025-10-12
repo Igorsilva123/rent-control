@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class UserMapper {
 
@@ -18,13 +20,14 @@ public class UserMapper {
             newUser.setName(dto.name());
             newUser.setEmail(dto.email());
             newUser.setPassword(passwordEncoder.encode(dto.password()));
+            newUser.setNickName(dto.nickName());
+            newUser.setRentedAt(LocalDate.now());
             newUser.setActive(Boolean.TRUE);
             return newUser;
+
         }
-
-
-    }
 }
+
 //
 //public record RegisterRequest(@NotBlank
 //                              String name,

@@ -1,11 +1,7 @@
 package aluguel.inquilino.api.DTO.user;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 
-import java.time.LocalDate;
 
 public record RegisterRequest(@NotBlank
                               String name,
@@ -14,6 +10,7 @@ public record RegisterRequest(@NotBlank
                               @NotBlank
                               String password,
                               @NotBlank
-                              String nickName
+                              String nickName,
+                              String phone
 ) {
 }
