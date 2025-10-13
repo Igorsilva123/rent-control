@@ -1,5 +1,6 @@
-package spring.project.security.infra.security;
+package aluguel.inquilino.api.infra.security;
 
+import aluguel.inquilino.api.domain.user.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -7,7 +8,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 
@@ -25,7 +25,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("Security Application")
-                    .withSubject(user.get())
+                    .withSubject(user.getUsername())
                     .withExpiresAt(expirations(30))
                     .sign(algorithm);
 
@@ -33,19 +33,19 @@ public class TokenService {
             throw new RuntimeException("Erro while authenticating");
         }
     }
-    public String generateRefreshToken(User user) {
-        try{
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.create()
-                    .withIssuer("Security Application")
-                    .withSubject(user.getId().toString())
-                    .withExpiresAt(expirations(120))
-                    .sign(algorithm);
-
-        }catch(JWTCreationException exception){
-            throw new RuntimeException("Erro genaration acess token JWT");
-        }
-    }
+//    public String generateRefreshToken(User user) {
+//        try{
+//            Algorithm algorithm = Algorithm.HMAC256(secret);
+//            return JWT.create()
+//                    .withIssuer("Security Application")
+//                    .withSubject(user.getId().toString())
+//                    .withExpiresAt(expirations(120))
+//                    .sign(algorithm);
+//
+//        }catch(JWTCreationException exception){
+//            throw new RuntimeException("Erro genaration acess token JWT");
+//        }
+//    }
     public String validateToken(String token){
         DecodedJWT decodedJWT;
         try {
