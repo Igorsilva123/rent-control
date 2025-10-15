@@ -1,20 +1,19 @@
-create table houses(
+CREATE TABLE houses (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    rent_value VARCHAR(100) NOT NULL,
+    logradouro VARCHAR(100) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
+    complemento VARCHAR(100),
+    numero VARCHAR(20),
+    uf CHAR(2) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
 
-    id_house bigint not null auto_increment,
-    rent_value varchar(100) not null,
-    logradouro varchar(100) not null,
-    bairro varchar(100) not null,
-    cep varchar(9) not null,
-    complemento varchar(100),
-    numero varchar(20),
-    uf char(2) not null,
-    cidade varchar(100) not null,
-    primary key(id_house),
-
-    owner_id BIGINT not null,
-    CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES owners(id_owner),
-
-
+    user_id BIGINT NOT NULL,
     tenant_id BIGINT,
-    CONSTRAINT fk_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id_tenants)
+
+    PRIMARY KEY(id),
+
+    CONSTRAINT fk_houses_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_houses_tenant FOREIGN KEY (tenant_id) REFERENCES users(id)
 );

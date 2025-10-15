@@ -1,10 +1,11 @@
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    nick_name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20),
+    name VARCHAR(255),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    nick_name VARCHAR(255),
+    phone VARCHAR(50),
     rented_at DATE,
-    active BOOLEAN DEFAULT TRUE
+    active BOOLEAN
 );
+

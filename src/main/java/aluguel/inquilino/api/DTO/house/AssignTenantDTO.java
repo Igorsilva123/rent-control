@@ -6,6 +6,6 @@ public record AssignTenantDTO(
         @NotNull
         Long houseId,
         @NotNull
-        Long tenantId
+        Long userId
 ) {
 }

@@ -1,12 +1,14 @@
 package aluguel.inquilino.api.domain.user;
 
+import aluguel.inquilino.api.domain.house.House;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,9 +32,20 @@ public class User implements UserDetails {
     private LocalDate rentedAt;
     private Boolean active;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<House> houses;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_profiles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "profile_id"))
+    private List<Profile> profiles = new ArrayList<>();;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return profiles != null ? profiles : List.of();
     }
 
     @Override
@@ -60,4 +73,8 @@ public class User implements UserDetails {
         return true;
     }
 
+
+    public void addProfile(Profile profile){
+        this.profiles.add(profile);
+    }
 }

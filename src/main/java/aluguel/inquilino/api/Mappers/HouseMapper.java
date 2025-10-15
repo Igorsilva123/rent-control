@@ -3,9 +3,8 @@ package aluguel.inquilino.api.Mappers;
 import aluguel.inquilino.api.DTO.house.HouseDataRegistrationDTO;
 import aluguel.inquilino.api.DTO.house.HouseListingDataDTO;
 import aluguel.inquilino.api.DTO.house.UpdateHouse;
-import aluguel.inquilino.api.domain.address.Address;
 import aluguel.inquilino.api.domain.house.House;
-import aluguel.inquilino.api.domain.owner.Owner;
+import aluguel.inquilino.api.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +14,11 @@ public class HouseMapper {
     @Autowired
     AddressMapper addressMapper;
 
-    public House toEntity(HouseDataRegistrationDTO data, Owner owner) {
+    public House toEntity(HouseDataRegistrationDTO data, User user) {
         House house = new House();
         house.setRent_value(data.rent_value());
         house.setAddress(addressMapper.toEntity(data.address()));
-        house.setOwner(owner);
+        house.setUser(user);
 
         return house;
     }public HouseListingDataDTO toDTO(House house) {
@@ -27,13 +26,13 @@ public class HouseMapper {
             return null;
         }
         return new HouseListingDataDTO(
-                house.getId_house(),
+                house.getId(),
                 house.getRent_value(),
                 house.getAddress(),
-                house.getOwner().getId_owner(),
-                house.getOwner().getName(),
-                house.getTenant() != null ? house.getTenant().getId_tenants() : null,
-                house.getTenant() != null ? house.getTenant().getName() : null
+                house.getUser().getId(),
+                house.getUser().getName(),
+                house.getUser() != null ? house.getUser().getId() : null,
+                house.getUser() != null ? house.getUser().getName() : null
         );
     }
 

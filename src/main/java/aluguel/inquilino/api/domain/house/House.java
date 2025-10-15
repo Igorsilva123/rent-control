@@ -1,10 +1,8 @@
 package aluguel.inquilino.api.domain.house;
 
-
 import aluguel.inquilino.api.domain.address.Address;
-import aluguel.inquilino.api.domain.owner.Owner;
-import aluguel.inquilino.api.domain.tenants.Tenant;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import aluguel.inquilino.api.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,25 +12,19 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id_house")
+@EqualsAndHashCode(of = "id")
 public class House {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_house;
+    private Long id;
     private String rent_value;
     @Embedded
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Owner owner;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tenant_id")
-    @JsonIgnore
-    private Tenant tenant;
-
-
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
 
 }

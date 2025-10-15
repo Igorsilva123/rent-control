@@ -43,22 +43,10 @@ public class AuthController {
 
             String token = tokenService.generateToken(user);
 
-            return ResponseEntity.ok(new ResponseLogin(user.getUsername(), token));
+            return ResponseEntity.ok(new ResponseLogin(user.getNickName(), token));
 
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
-        }
-    }
-
-    // 🔹 REGISTER
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest dto, UriComponentsBuilder uriBuilder) {
-        try {
-            var user = userService.registerUser(dto);
-            var uri = uriBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri();
-            return ResponseEntity.created(uri).body("Usuário registrado com sucesso!");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(401).body("Credenciais inválidas");
         }
     }
 }

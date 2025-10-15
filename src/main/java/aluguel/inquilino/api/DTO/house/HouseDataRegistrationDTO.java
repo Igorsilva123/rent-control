@@ -13,6 +13,6 @@ public record HouseDataRegistrationDTO(
         DataAddressDTO address,
 
         @NotNull
-        Long owner_id
+        Long user_id
 ) {
 }

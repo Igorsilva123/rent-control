@@ -1,24 +1,19 @@
 package aluguel.inquilino.api.service;
 
-
 import aluguel.inquilino.api.DTO.house.*;
 import aluguel.inquilino.api.Mappers.HouseMapper;
 import aluguel.inquilino.api.domain.house.House;
-import aluguel.inquilino.api.domain.owner.Owner;
-import aluguel.inquilino.api.domain.tenants.Tenant;
+import aluguel.inquilino.api.domain.user.User;
 import aluguel.inquilino.api.exception.BusinessRuleException;
 import aluguel.inquilino.api.exception.ResourceNotFoundException;
 import aluguel.inquilino.api.repository.HouseRepository;
-import aluguel.inquilino.api.repository.OwnerRepository;
-import aluguel.inquilino.api.repository.TenantsRepository;
+import aluguel.inquilino.api.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,20 +23,17 @@ public class HouseService {
     private HouseRepository repository;
 
     @Autowired
-    private OwnerRepository ownerRepository;
-
-    @Autowired
-    private TenantsRepository tenantsRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private HouseMapper houseMapper;
 
     @Transactional
     public void saveHouse(HouseDataRegistrationDTO data) {
-        Owner owner = ownerRepository.findById(data.owner_id())
-                .orElseThrow(() -> new ResourceNotFoundException("Proprietário com ID " + data.owner_id() + " não encontrado."));
+        User user = userRepository.findById(data.user_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Proprietário com ID " + data.user_id() + " não encontrado."));
 
-        House house = houseMapper.toEntity(data, owner);
+        House house = houseMapper.toEntity(data, user);
 
         repository.save(house);
     }
@@ -58,15 +50,15 @@ public class HouseService {
         House house = repository.findById(dto.houseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Casa com ID " + dto.houseId() + " não encontrada."));
 
-        Tenant tenant = tenantsRepository.findById(dto.tenantId())
-                .orElseThrow(() -> new ResourceNotFoundException("Inquilino com ID " + dto.tenantId() + " não encontrado."));
+        User user = userRepository.findById(dto.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("Inquilino com ID " + dto.userId() + " não encontrado."));
 
-        if (repository.existsByTenant(tenant)) {
-            throw new BusinessRuleException("Inquilino com ID " + tenant.getId_tenants() + " já está associado a uma casa.");
+        if (repository.existsByUser(user)) {
+            throw new BusinessRuleException("Inquilino com ID " + user.getId() + " já está associado a uma casa.");
         }
-        house.setTenant(tenant);
-        tenant.setHouse(house);
-        tenant.setRentedAt(LocalDate.now());
+        house.setUser(user);
+        user.getHouses().add(house);
+        user.setRentedAt(LocalDate.now());
 
         House putHouse = repository.save(house);
 
@@ -91,10 +83,10 @@ public class HouseService {
         House house = repository.findById(dto.houseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Casa com ID" +  dto.houseId() + "não encontrada. ")
                 );
-        if (house.getTenant() == null) {
+        if (house.getUser() == null) {
             throw new ResourceNotFoundException("A casa com ID " + dto.houseId() + "não possui inquilino associado." );
         }
-        house.setTenant(null);
+        house.setUser(null);
 
         return repository.save(house);
     }
