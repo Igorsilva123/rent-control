@@ -33,8 +33,8 @@ public class HouseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteHouse(@PathVariable Long id_house){
-        houseService.deleteById(id_house);
+    public ResponseEntity<?> deleteHouse(@PathVariable Long id){
+        houseService.deleteById(id);
         return ResponseEntity.noContent().build();
 
     }

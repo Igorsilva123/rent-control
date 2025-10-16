@@ -30,7 +30,6 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
-    // 🔹 LOGIN
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest dto) {
         try {
