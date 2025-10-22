@@ -32,4 +32,16 @@ public class UserController {
         var user = userService.addProfile(id, data);
         return ResponseEntity.ok(new UserListingData(user));
         }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
+        var user = userService.deactivateUser(id);
+        return ResponseEntity.ok("Usuário " + user.getEmail() + " foi desativado com sucesso.");
+        }
+
+    @PutMapping("/{id}/active")
+    public ResponseEntity<?> activateUser(@PathVariable Long id) {
+        var user = userService.activateUser(id);
+        return ResponseEntity.ok("Usuário " + user.getEmail() + " foi ativado com sucesso.");
     }
+}

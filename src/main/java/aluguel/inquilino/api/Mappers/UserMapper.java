@@ -31,7 +31,9 @@ public class UserMapper {
             return newUser;
 
         }
-
+    public boolean isEnabled() {
+        return this.active != null && this.active;
+    }
 //        public void updateEntity(UpdateHouse dto, House house) {
 //            if (dto.rent_value() != null) {
 //                house.setRent_value(dto.rent_value());

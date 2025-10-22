@@ -9,6 +9,7 @@ import aluguel.inquilino.api.domain.user.User;
 import aluguel.inquilino.api.infra.security.TokenService;
 import aluguel.inquilino.api.repository.ProfileRepository;
 import aluguel.inquilino.api.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,5 +68,28 @@ public class UserService {
         var profile = profileRepository.findByName(data.profileName());
         user.addProfile(profile);
         return user;
+    }
+    @Transactional
+    public User deactivateUser(Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (!user.getActive()) {
+            throw new IllegalStateException("Usuário já está desativado");
+        }
+
+        user.setActive(false);
+        return userRepository.save(user);
+    }@Transactional
+    public User activateUser(Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (user.getActive()) {
+            throw new IllegalStateException("usuario já esta ativo");
+        }
+
+        user.setActive(true);
+        return userRepository.save(user);
     }
 }
