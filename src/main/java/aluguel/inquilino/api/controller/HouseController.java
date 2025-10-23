@@ -16,7 +16,7 @@ public class HouseController {
 
     @Autowired
     private HouseService houseService;
-    @PostMapping
+    @PostMapping("create")
     public ResponseEntity<?> saveHouse(@RequestBody @Valid HouseDataRegistrationDTO data){
         houseService.saveHouse(data);
 

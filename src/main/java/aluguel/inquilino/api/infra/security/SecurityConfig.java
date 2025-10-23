@@ -26,7 +26,8 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth ->{ auth.requestMatchers("/auth/login", "/auth/register").permitAll();
                         auth.requestMatchers(HttpMethod.PATCH, "/auth/adicionar-perfil/**").hasRole("ADMIN");
-                        auth.requestMatchers(HttpMethod.PUT, "/house/assign-tenant").hasRole("ADMIN");
+                        auth.requestMatchers(HttpMethod.POST, "/house/create").hasRole("OWNER");
+                        auth.requestMatchers(HttpMethod.PUT, "/house/assign-tenant").hasRole("OWNER");
                         auth.anyRequest().authenticated();
                         }
                 )
@@ -48,9 +49,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public RoleHierarchy hierarchyProfile(){
-        String hierarchy = "ROLE_ADMIN > ROLE_OWNER \n"+
-                "ROLE_OWNER > ROLE_TENANT \n";
+    public RoleHierarchy hierarchyProfile() {
+        String hierarchy = """
+        ROLE_ADMIN > ROLE_OWNER
+        ROLE_OWNER > ROLE_TENANT
+        """;
         return RoleHierarchyImpl.fromHierarchy(hierarchy);
     }
 }
