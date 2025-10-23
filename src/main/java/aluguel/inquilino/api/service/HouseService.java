@@ -46,12 +46,12 @@ public class HouseService {
     }
 
     @Transactional
-    public HouseListingDataDTO assignTenantToHouse(@Valid AssignTenantDTO dto) {
-        House house = repository.findById(dto.houseId())
-                .orElseThrow(() -> new ResourceNotFoundException("Casa com ID " + dto.houseId() + " não encontrada."));
+    public HouseListingDataDTO assignTenantToHouse(Long houseId, Long userId) {
+        House house = repository.findById(houseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Casa com ID " + houseId + " não encontrada."));
 
-        User user = userRepository.findById(dto.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("Inquilino com ID " + dto.userId() + " não encontrado."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Inquilino com ID " + userId + " não encontrado."));
 
         if (repository.existsByUser(user)) {
             throw new BusinessRuleException("Inquilino com ID " + user.getId() + " já está associado a uma casa.");

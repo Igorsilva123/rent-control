@@ -45,9 +45,9 @@ public class HouseController {
         return ResponseEntity.ok(newHouse);
     }
 
-    @PutMapping("/assign-tenant")
-    public ResponseEntity<HouseListingDataDTO> assignTenant(@RequestBody @Valid AssignTenantDTO data) {
-        HouseListingDataDTO updateHouse = houseService.assignTenantToHouse(data);
+    @PutMapping("/{houseId}/assign-tenant/{tenantId}")
+    public ResponseEntity<HouseListingDataDTO> assignTenant(@PathVariable Long houseId, @PathVariable Long tenantId) {
+        HouseListingDataDTO updateHouse = houseService.assignTenantToHouse(houseId, tenantId);
         return ResponseEntity.ok(updateHouse);
     }
 
